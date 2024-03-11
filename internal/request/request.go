@@ -25,6 +25,11 @@ func New(url, method string, requestBody []byte) (*http.Request, error) {
 func NewWithBuffer(url, method string, requestBody io.Reader) (*http.Request, error) {
 	return http.NewRequest(method, url, requestBody)
 }
+
+func NewWithContextBuffer(ctx context.Context, url, method string, requestBody io.Reader) (*http.Request, error) {
+	return http.NewRequestWithContext(ctx, method, url, requestBody)
+}
+
 func SetHeaders(req *http.Request, headers []Header) {
 	for _, header := range headers {
 		req.Header.Set(header.Key, fmt.Sprintf("%v", header.Value))
