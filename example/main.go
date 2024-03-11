@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -12,7 +13,7 @@ import (
 func main() {
 	openaiAPIKey := os.Getenv("OPENAI_KEY")
 
-	openai := openai.New(openaiAPIKey)
+	openai := openai.WithContext(context.Background(),openaiAPIKey)
 	model := "gpt-3.5-turbo"
 	chatCompletion, err := openai.ChatGPT(
 		model,

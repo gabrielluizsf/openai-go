@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"crypto/rand"
 	"fmt"
 	"io"
@@ -10,7 +11,7 @@ import (
 	"github.com/gabrielluizsf/openai-go/pkg/openai"
 )
 
-func SaveTextToSpeech(client *openai.Client, model, input, voice, filePath string) error {
+func SaveTextToSpeech(client openai.OpenAIClient, model, input, voice, filePath string) error {
 	ttsResult, err := client.TextToSpeech(model, input, voice)
 	if err != nil {
 		return err
@@ -33,7 +34,7 @@ func SaveTextToSpeech(client *openai.Client, model, input, voice, filePath strin
 }
 
 func main() {
-	openai := openai.New(os.Getenv("OPENAI_KEY"))
+	openai := openai.WithContext(context.Background(),os.Getenv("OPENAI_KEY"))
 	message := "oi"
 	n, err := rand.Read([]byte(message))
 	if err != nil {
