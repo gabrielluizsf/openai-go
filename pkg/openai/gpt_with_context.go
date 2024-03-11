@@ -8,29 +8,42 @@ import (
 )
 
 // model https://platform.openai.com/docs/models/model-endpoint-compatibility
-func (oc *ClientWithContext) ChatGPT(model string, messages []chat.Message) (*chat.ChatCompletion, *OpenAIError) {
+func (oc *ClientWithContext) ChatGPT(model string, messages []chat.Message, maxTokens ...int) (*chat.ChatCompletion, *OpenAIError) {
 	url := BASE_URL + "/chat/completions"
 	openaiAPIKey := oc.APIKey
 	if openaiAPIKey == "" {
 		return nil, InvalidAPIKey()
 	}
-	var requestMessages []request.JSON
-	for _, message := range messages {
-		requestMessages = append(requestMessages, request.JSON{
-			"role":    message.Role,
-			"content": message.Content,
-		})
+	requestBody := request.JSON{
+		"model": model,
+		"messages": func() []request.JSON {
+			var requestMessages []request.JSON
+			for _, message := range messages {
+				requestMessages = append(requestMessages, request.JSON{
+					"role":    message.Role,
+					"content": message.Content,
+				})
+			}
+			return requestMessages
+		}(),
 	}
 
-	requestBody, err := request.MarshalJSON(request.JSON{
-		"model":    model,
-		"messages": requestMessages,
-	})
+	if len(maxTokens) > 0 {
+		requestBody["max_tokens"] = func() int {
+			sum := 0
+			for _, number := range maxTokens {
+				sum += number
+			}
+			return sum
+		}()
+	}
+
+	requestBodyJSON, err := request.MarshalJSON(requestBody)
 	if err != nil {
 		return nil, CreateBodyError(err)
 	}
 
-	req, err := request.WithContext(oc.Ctx, http.MethodPost, url, requestBody)
+	req, err := request.WithContext(oc.Ctx, http.MethodPost, url, requestBodyJSON)
 	if err != nil {
 		return nil, CreateRequestError(err)
 	}

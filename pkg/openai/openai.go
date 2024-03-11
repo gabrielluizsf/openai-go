@@ -10,7 +10,7 @@ const BASE_URL = "https://api.openai.com/v1"
 
 type OpenAIClient interface {
 	GetAPIKey() string
-	ChatGPT(string, []chat.Message) (*chat.ChatCompletion, *OpenAIError)
+	ChatGPT(string, []chat.Message, ...int) (*chat.ChatCompletion, *OpenAIError)
 	AudioTranscription(string, string, string) (*AudioTranscriptionResponse, error)
 	TextToSpeech(string, string, string) (*TTSResult, error)
 }
