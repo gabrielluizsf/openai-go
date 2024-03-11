@@ -6,7 +6,7 @@ import (
 	"github.com/gabrielluizsf/openai-go/internal/request"
 )
 
-func setHeaders(req *http.Request, oc *Client, contentType string) {
+func setHeaders(req *http.Request, oc OpenAIClient, contentType string) {
 	request.SetHeaders(
 		req,
 		[]request.Header{
@@ -16,7 +16,7 @@ func setHeaders(req *http.Request, oc *Client, contentType string) {
 			},
 			{
 				Key:   "Authorization",
-				Value: "Bearer " + oc.APIKey,
+				Value: "Bearer " + oc.GetAPIKey(),
 			},
 		})
 }
