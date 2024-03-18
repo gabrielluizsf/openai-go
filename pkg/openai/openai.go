@@ -16,31 +16,31 @@ type OpenAIClient interface {
 }
 
 type Client struct {
-	APIKey string
+	apiKey string
 }
 
 func (oc *Client) GetAPIKey() string {
-	return oc.APIKey
+	return oc.apiKey
 }
 
 func New(apiKey string) *Client {
 	return &Client{
-		APIKey: apiKey,
+		apiKey: apiKey,
 	}
 }
 
 type ClientWithContext struct {
-	APIKey string
+	apiKey string
 	Ctx    context.Context
 }
 
 func (oc *ClientWithContext) GetAPIKey() string {
-	return oc.APIKey
+	return oc.apiKey
 }
 
 func WithContext(ctx context.Context, apiKey string) *ClientWithContext {
 	return &ClientWithContext{
-		APIKey: apiKey,
+		apiKey: apiKey,
 		Ctx:    ctx,
 	}
 }

@@ -8,7 +8,7 @@ import (
 
 func (oc *ClientWithContext) TextToSpeech(model, input, voice string) (*TTSResult, error) {
 	url := BASE_URL + "/audio/speech"
-	openaiAPIKey := oc.APIKey
+	openaiAPIKey := oc.GetAPIKey()
 	if openaiAPIKey == "" {
 		return nil, InvalidAPIKey()
 	}

@@ -10,7 +10,7 @@ import (
 // model https://platform.openai.com/docs/models/model-endpoint-compatibility
 func (oc *Client) ChatGPT(model string, messages []chat.Message, maxTokens ...int) (*chat.ChatCompletion, *OpenAIError) {
 	url := BASE_URL + "/chat/completions"
-	openaiAPIKey := oc.APIKey
+	openaiAPIKey := oc.GetAPIKey()
 	if openaiAPIKey == "" {
 		return nil, InvalidAPIKey()
 	}
