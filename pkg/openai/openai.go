@@ -22,7 +22,13 @@ type Client struct {
 func (oc *Client) GetAPIKey() string {
 	return oc.apiKey
 }
-
+// New creates a new OpenAI client with the provided API key.
+//
+// Example of use:
+//
+// 	apiKey := "your-api-key-here"
+// 	client := openai.New(apiKey)
+// 
 func New(apiKey string) *Client {
 	return &Client{
 		apiKey: apiKey,

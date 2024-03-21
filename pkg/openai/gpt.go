@@ -7,7 +7,26 @@ import (
 	"github.com/gabrielluizsf/openai-go/pkg/openai/chat"
 )
 
-// model https://platform.openai.com/docs/models/model-endpoint-compatibility
+// ChatGPT sends a chat request to GPT.
+//
+// Example:
+//
+//	// Create a new OpenAI client
+//	client := openai.New("your-api-key")
+//
+//	// Define messages for the conversation
+//	messages := []chat.Message{
+//	    {Role: "system", Content: "You are a helpful assistant"},
+//	    {Role: "user", Content: "Hello"},
+//	}
+//
+//	// Send chat request to GPT
+//	res, err := client.ChatGPT("gpt-3.5-turbo", messages)
+//	if err != nil {
+//	    fmt.Println("Error:", err)
+//	    return
+//	}
+//	fmt.Println("Response:", res)
 func (oc *Client) ChatGPT(model string, messages []chat.Message, maxTokens ...int) (*chat.ChatCompletion, *OpenAIError) {
 	url := BASE_URL + "/chat/completions"
 	openaiAPIKey := oc.GetAPIKey()
