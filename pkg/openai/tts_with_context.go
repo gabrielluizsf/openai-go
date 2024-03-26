@@ -27,7 +27,7 @@ import (
 //	// Use ttsResult.Audio for further processing, e.g., saving to a file or streaming to a client.
 func (oc *ClientWithContext) TextToSpeech(model, input, voice string) (*TTSResult, error) {
 	url := BASE_URL + "/audio/speech"
-	openaiAPIKey := oc.GetAPIKey()
+	openaiAPIKey := oc.getAPIKey()
 	if openaiAPIKey == "" {
 		return nil, InvalidAPIKey()
 	}

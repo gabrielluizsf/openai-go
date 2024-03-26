@@ -9,7 +9,7 @@ import (
 const BASE_URL = "https://api.openai.com/v1"
 
 type OpenAIClient interface {
-	GetAPIKey() string
+	getAPIKey() string
 	ChatGPT(string, []chat.Message, ...int) (*chat.ChatCompletion, *OpenAIError)
 	AudioTranscription(string, string, string) (*AudioTranscriptionResponse, error)
 	TextToSpeech(string, string, string) (*TTSResult, error)
@@ -19,7 +19,7 @@ type Client struct {
 	apiKey string
 }
 
-func (oc *Client) GetAPIKey() string {
+func (oc *Client) getAPIKey() string {
 	return oc.apiKey
 }
 // New creates a new OpenAI client with the provided API key.
@@ -40,7 +40,7 @@ type ClientWithContext struct {
 	Ctx    context.Context
 }
 
-func (oc *ClientWithContext) GetAPIKey() string {
+func (oc *ClientWithContext) getAPIKey() string {
 	return oc.apiKey
 }
 

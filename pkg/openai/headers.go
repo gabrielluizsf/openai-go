@@ -16,7 +16,7 @@ func setHeaders(req *http.Request, oc OpenAIClient, contentType string) {
 			},
 			{
 				Key:   "Authorization",
-				Value: "Bearer " + oc.GetAPIKey(),
+				Value: "Bearer " + oc.getAPIKey(),
 			},
 		})
 }

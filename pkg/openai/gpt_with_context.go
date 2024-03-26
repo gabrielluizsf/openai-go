@@ -29,7 +29,7 @@ import (
 //	fmt.Println("Response:", res)
 func (oc *ClientWithContext) ChatGPT(model string, messages []chat.Message, maxTokens ...int) (*chat.ChatCompletion, *OpenAIError) {
 	url := BASE_URL + "/chat/completions"
-	openaiAPIKey := oc.GetAPIKey()
+	openaiAPIKey := oc.getAPIKey()
 	if openaiAPIKey == "" {
 		return nil, InvalidAPIKey()
 	}
