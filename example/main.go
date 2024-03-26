@@ -13,18 +13,19 @@ import (
 func main() {
 	openaiAPIKey := os.Getenv("OPENAI_KEY")
 
-	openai := openai.WithContext(context.Background(),openaiAPIKey)
+	openai := openai.WithContext(context.Background(), openaiAPIKey)
 	model := "gpt-3.5-turbo"
+	role := chat.Role()
 	chatCompletion, err := openai.ChatGPT(
 		model,
 		[]chat.Message{
 			{
-				Role:    "system",
+				Role:    role.System().String(),
 				Content: "You are a helpful assistant.",
 			},
 			{
-				Role:    "user",
-				Content: "oie",
+				Role:    role.User().String(),
+				Content: "hello",
 			},
 		})
 	if err != nil {
