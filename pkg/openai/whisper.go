@@ -2,13 +2,13 @@ package openai
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"mime/multipart"
-	"net/http"
 	"os"
 
-	"github.com/gabrielluizsf/openai-go/internal/request"
+	"github.com/gabrielluizsf/goxios"
 )
 
 type AudioTranscriptionResponse struct {
@@ -46,7 +46,6 @@ type AudioTranscriptionResponse struct {
 // - If an error occurs when making the HTTP request to the OpenAI service.
 // - If an error occurs while decoding the JSON response from the OpenAI service.
 // - If the HTTP response status code is not 200 (OK).
-//
 func (oc *Client) AudioTranscription(model, fileName, audioFilePath string) (*AudioTranscriptionResponse, error) {
 	file, err := os.Open(audioFilePath)
 	if err != nil {
@@ -71,26 +70,21 @@ func (oc *Client) AudioTranscription(model, fileName, audioFilePath string) (*Au
 	writer.Close()
 
 	url := BASE_URL + "/audio/transcriptions"
-	req, err := request.NewWithBuffer(url, http.MethodPost, body)
+	client := goxios.NewClient(context.Background())
+	headers := openaiRequestHeaders(oc, writer.FormDataContentType())
+	res, err := client.Post(url, headers, body)
 	if err != nil {
 		return nil, err
 	}
-	setHeaders(req, oc, writer.FormDataContentType())
-
-	client := request.Client()
-	resp, err := request.Response(req, client)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
 
 	var result AudioTranscriptionResponse
 
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	if err := json.NewDecoder(res.Body).Decode(&result); err != nil {
 		return nil, err
 	}
-	if resp.StatusCode != 200 {
-		return nil, RequestError(resp.StatusCode)
+	if res.StatusCode != 200 {
+		return nil, RequestError(res.StatusCode)
 	}
 	return &result, nil
 

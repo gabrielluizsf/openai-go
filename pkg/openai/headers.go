@@ -1,22 +1,16 @@
 package openai
 
-import (
-	"net/http"
+import "github.com/gabrielluizsf/goxios"
 
-	"github.com/gabrielluizsf/openai-go/internal/request"
-)
-
-func setHeaders(req *http.Request, oc OpenAIClient, contentType string) {
-	request.SetHeaders(
-		req,
-		[]request.Header{
-			{
-				Key:   "Content-Type",
-				Value: contentType,
-			},
-			{
-				Key:   "Authorization",
-				Value: "Bearer " + oc.getAPIKey(),
-			},
-		})
+func openaiRequestHeaders(oc OpenAIClient, contentType string) []goxios.Header {
+	return []goxios.Header{
+		{
+			Key:   "Content-Type",
+			Value: contentType,
+		},
+		{
+			Key:   "Authorization",
+			Value: "Bearer " + oc.getAPIKey(),
+		},
+	}
 }

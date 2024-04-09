@@ -1,9 +1,10 @@
 package openai
 
 import (
-	"net/http"
+	"bytes"
+	"context"
 
-	"github.com/gabrielluizsf/openai-go/internal/request"
+	"github.com/gabrielluizsf/goxios"
 	"github.com/gabrielluizsf/openai-go/pkg/openai/chat"
 )
 
@@ -33,12 +34,12 @@ func (oc *Client) ChatGPT(model string, messages []chat.Message, maxTokens ...in
 	if openaiAPIKey == "" {
 		return nil, InvalidAPIKey()
 	}
-	requestBody := request.JSON{
+	requestBody := goxios.JSON{
 		"model": model,
-		"messages": func() []request.JSON {
-			var requestMessages []request.JSON
+		"messages": func() []goxios.JSON {
+			var requestMessages []goxios.JSON
 			for _, message := range messages {
-				requestMessages = append(requestMessages, request.JSON{
+				requestMessages = append(requestMessages, goxios.JSON{
 					"role":    message.Role,
 					"content": message.Content,
 				})
@@ -57,25 +58,21 @@ func (oc *Client) ChatGPT(model string, messages []chat.Message, maxTokens ...in
 		}()
 	}
 
-	requestBodyJSON, err := request.MarshalJSON(requestBody)
+	requestBodyJSON, err := requestBody.Marshal()
 	if err != nil {
 		return nil, CreateBodyError(err)
 	}
 
-	req, err := request.New(url, http.MethodPost, requestBodyJSON)
-	if err != nil {
-		return nil, CreateRequestError(err)
-	}
-	setHeaders(req, oc, "application/json")
-	client := request.Client()
-	resp, err := request.Response(req, client)
+	client := goxios.NewClient(context.Background())
+	headers := openaiRequestHeaders(oc, "application/json")
+	res, err := client.Post(url, headers, bytes.NewBuffer(requestBodyJSON))
 	if err != nil {
 		return nil, SendRequestError(err)
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
 
 	var chatCompletion chat.ChatCompletion
-	err = request.DecodeJSON(resp.Body, &chatCompletion)
+	err = goxios.DecodeJSON(res.Body, &chatCompletion)
 	if err != nil {
 		return nil, DecodeJSONError(err)
 	}
