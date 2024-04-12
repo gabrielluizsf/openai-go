@@ -2,4 +2,4 @@ module github.com/gabrielluizsf/openai-go
 
 go 1.22.0
 
-require github.com/gabrielluizsf/goxios v0.0.0-20240409170933-c504f9d8ce3a
+require github.com/gabrielluizsf/goxios v0.0.0-20240412112803-b44abc9da8c7
