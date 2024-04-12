@@ -48,9 +48,13 @@ func (oc *Client) TextToSpeech(model, input, voice string) (*TTSResult, error) {
 		return nil, CreateBodyError(err)
 	}
 
-	client := goxios.NewClient(context.Background())
+	client := goxios.New(context.Background())
 	headers := openaiRequestHeaders(oc, "application/json")
-	res, err := client.Post(url, headers, bytes.NewBuffer(requestBody))
+	requestOptions := goxios.RequestOpts{
+		Headers: headers,
+		Body: bytes.NewBuffer(requestBody),
+	}
+	res, err := client.Post(url, &requestOptions)
 	if err != nil {
 		return nil, SendRequestError(err)
 	}

@@ -63,9 +63,13 @@ func (oc *Client) ChatGPT(model string, messages []chat.Message, maxTokens ...in
 		return nil, CreateBodyError(err)
 	}
 
-	client := goxios.NewClient(context.Background())
+	client := goxios.New(context.Background())
 	headers := openaiRequestHeaders(oc, "application/json")
-	res, err := client.Post(url, headers, bytes.NewBuffer(requestBodyJSON))
+	requestOptions := goxios.RequestOpts{
+		Headers: headers,
+		Body: bytes.NewBuffer(requestBodyJSON),
+	}
+	res, err := client.Post(url, &requestOptions)
 	if err != nil {
 		return nil, SendRequestError(err)
 	}

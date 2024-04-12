@@ -70,9 +70,13 @@ func (oc *Client) AudioTranscription(model, fileName, audioFilePath string) (*Au
 	writer.Close()
 
 	url := BASE_URL + "/audio/transcriptions"
-	client := goxios.NewClient(context.Background())
+	client := goxios.New(context.Background())
 	headers := openaiRequestHeaders(oc, writer.FormDataContentType())
-	res, err := client.Post(url, headers, body)
+	requestOptions := goxios.RequestOpts{
+		Headers: headers,
+		Body: body,
+	}
+	res, err := client.Post(url, &requestOptions)
 	if err != nil {
 		return nil, err
 	}
