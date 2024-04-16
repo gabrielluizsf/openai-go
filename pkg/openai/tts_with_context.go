@@ -2,10 +2,10 @@ package openai
 
 // TextToSpeech converts the given text input into speech using the specified model and voice.
 //
-// Parameters:
-//   - model: A string representing the model to use for text-to-speech conversion.
-//   - input: The input text to be converted into speech.
-//   - voice: A string representing the voice to be used for speech synthesis.
+// TextToSpeechParams:
+//   - Model: A string representing the model to use for text-to-speech conversion.
+//   - Input: The input text to be converted into speech.
+//   - Voice: A string representing the voice to be used for speech synthesis.
 //
 // Returns:
 //   - *TTSResult: A pointer to a TTSResult struct containing the synthesized audio as an io.ReadCloser.
@@ -13,7 +13,11 @@ package openai
 //
 // Example:
 //
-//	ttsResult, err := openai.New("your-api-key").TextToSpeech("gpt-3.5-tts", "Hello, world!", "onyx")
+//	ttsResult, err := openai.New("your-api-key").TextToSpeech(&openai.TextToSpeechParams{
+//		Model: "tts-1",
+//		Input: "oi",
+//		Voice: "onix",
+//	})
 //	if err != nil {
 //	    log.Fatal("Text-to-speech conversion failed:", err)
 //	}
