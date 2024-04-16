@@ -1,12 +1,5 @@
 package openai
 
-import (
-	"bytes"
-	"net/http"
-
-	"github.com/gabrielluizsf/goxios"
-)
-
 // TextToSpeech converts the given text input into speech using the specified model and voice.
 //
 // Parameters:
@@ -26,37 +19,6 @@ import (
 //	}
 //	defer ttsResult.Audio.Close()
 //	// Use ttsResult.Audio for further processing, e.g., saving to a file or streaming to a client.
-func (oc *ClientWithContext) TextToSpeech(model, input, voice string) (*TTSResult, error) {
-	url := BASE_URL + "/audio/speech"
-	openaiAPIKey := oc.getAPIKey()
-	if openaiAPIKey == "" {
-		return nil, InvalidAPIKey()
-	}
-	json := goxios.JSON{
-		"model": model,
-		"input": input,
-		"voice": voice,
-	}
-	requestBody, err := json.Marshal()
-	if err != nil {
-		return nil, CreateBodyError(err)
-	}
-
-	client := goxios.New(oc.Ctx)
-	headers := openaiRequestHeaders(oc, "application/json")
-	requestOptions := goxios.RequestOpts{
-		Headers: headers,
-		Body: bytes.NewBuffer(requestBody),
-	}
-	res, err := client.Post(url, &requestOptions)
-	if err != nil {
-		return nil, SendRequestError(err)
-	}
-
-	if res.StatusCode != http.StatusOK {
-		return nil, RequestError(res.StatusCode)
-	}
-	return &TTSResult{
-		Audio: res.Body,
-	}, nil
+func (oc *ClientWithContext) TextToSpeech(requestParams *TextToSpeechParams) (*TTSResult, error) {
+	return requestParams.Response(oc)
 }
