@@ -2,7 +2,6 @@ package openai
 
 import (
 	"bytes"
-	"context"
 
 	"github.com/gabrielluizsf/goxios"
 	"github.com/gabrielluizsf/openai-go/pkg/openai/chat"
@@ -49,7 +48,7 @@ func (param *ChatCompletionRequestParams) Response(oc OpenAIClient) (*chat.ChatC
 		return nil, CreateBodyError(err)
 	}
 
-	client := goxios.New(context.Background())
+	client := goxios.New(oc.Context())
 	headers := openaiRequestHeaders(oc, "application/json")
 	requestOptions := goxios.RequestOpts{
 		Headers: headers,
