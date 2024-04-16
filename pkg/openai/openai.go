@@ -12,11 +12,16 @@ type OpenAIClient interface {
 	getAPIKey() string
 	ChatGPT(*ChatCompletionRequestParams) (*chat.ChatCompletion, *OpenAIError)
 	AudioTranscription(string, string, string) (*AudioTranscriptionResponse, error)
-	TextToSpeech(string, string, string) (*TTSResult, error)
+	TextToSpeech(*TextToSpeechParams) (*TTSResult, error)
+	Context() context.Context
 }
 
 type Client struct {
 	apiKey string
+}
+
+func (oc *Client) Context() context.Context{
+	return context.Background()
 }
 
 func (oc *Client) getAPIKey() string {
@@ -36,17 +41,20 @@ func New(apiKey string) *Client {
 }
 
 type ClientWithContext struct {
-	apiKey string
+	Client
 	Ctx    context.Context
 }
 
-func (oc *ClientWithContext) getAPIKey() string {
-	return oc.apiKey
+func (oc *ClientWithContext) Context() context.Context{
+	return oc.Ctx
 }
+
 
 func WithContext(ctx context.Context, apiKey string) *ClientWithContext {
 	return &ClientWithContext{
-		apiKey: apiKey,
+		Client: Client{
+			apiKey: apiKey,
+		},
 		Ctx:    ctx,
 	}
 }
