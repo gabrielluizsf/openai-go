@@ -37,13 +37,13 @@ func main() {
 			})
 		}
 		openai := openai.WithContext(c.Context(), apiKey)
-		response, err := openai.ChatGPT(
-			"gpt-3.5-turbo",
-			[]chat.Message{
+		response, err := openai.ChatGPT(&openai.ChatCompletionRequestParams{
+			Model: "gpt-3.5-turbo",
+			Messages: []chat.Message{
 				{Role: "system", Content: body.System},
 				{Role: "user", Content: body.Message},
 			},
-		)
+		})
 		if err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"errMessage": err.Error(),
@@ -92,13 +92,13 @@ func main() {
 		}
 
 		openaiClient := openai.WithContext(c.Request().Context(), apiKey)
-		response, err := openaiClient.ChatGPT(
-			"gpt-3.5-turbo",
-			[]chat.Message{
+		response, err := openaiClient.ChatGPT(&openai.ChatCompletionRequestParams{
+			Model: "gpt-3.5-turbo",
+			Messages:[]chat.Message{
 				{Role: "system", Content: body.System},
 				{Role: "user", Content: body.Message},
 			},
-		)
+		})
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"errMessage": err.Error()})
 		}
