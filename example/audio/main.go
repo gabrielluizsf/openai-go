@@ -12,7 +12,11 @@ import (
 )
 
 func SaveTextToSpeech(client openai.OpenAIClient, model, input, voice, filePath string) error {
-	ttsResult, err := client.TextToSpeech(model, input, voice)
+	ttsResult, err := client.TextToSpeech(&openai.TextToSpeechParams{
+		Model: model,
+		Input: input,
+		Voice: voice,
+	})
 	if err != nil {
 		return err
 	}
