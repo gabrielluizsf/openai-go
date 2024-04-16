@@ -38,18 +38,22 @@ func SaveTextToSpeech(client openai.OpenAIClient, model, input, voice, filePath 
 }
 
 func main() {
-	openai := openai.WithContext(context.Background(),os.Getenv("OPENAI_KEY"))
+	openaiClient := openai.WithContext(context.Background(),os.Getenv("OPENAI_KEY"))
 	message := "oi"
 	n, err := rand.Read([]byte(message))
 	if err != nil {
 		log.Fatal(err)
 	}
-	fileName := fmt.Sprintf("%d%s.mp3", n, message)
-	filePath := "./temp/" + fileName
-	if err := SaveTextToSpeech(openai, "tts-1", message, "onyx", filePath); err != nil {
+	filename := fmt.Sprintf("%d%s.mp3", n, message)
+	filePath := "./temp/" + filename
+	if err := SaveTextToSpeech(openaiClient, "tts-1", message, "onyx", filePath); err != nil {
 		log.Fatal(err)
 	}
-	transcription, err := openai.AudioTranscription("whisper-1", fileName, filePath)
+	transcription, err := openaiClient.AudioTranscription(&openai.WhisperParams{
+		Model:"whisper-1", 
+		Filename: filename, 
+		AudioFilePath: filePath,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
