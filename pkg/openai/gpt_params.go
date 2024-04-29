@@ -3,7 +3,7 @@ package openai
 import (
 	"bytes"
 
-	"github.com/gabrielluizsf/goxios"
+	"github.com/Simplou/goxios"
 	"github.com/gabrielluizsf/openai-go/pkg/openai/chat"
 )
 

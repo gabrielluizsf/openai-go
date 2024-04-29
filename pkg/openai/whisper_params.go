@@ -7,7 +7,7 @@ import (
 	"mime/multipart"
 	"os"
 
-	"github.com/gabrielluizsf/goxios"
+	"github.com/Simplou/goxios"
 )
 
 type WhisperParams struct {

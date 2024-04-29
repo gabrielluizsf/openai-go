@@ -1,6 +1,6 @@
 package openai
 
-import "github.com/gabrielluizsf/goxios"
+import "github.com/Simplou/goxios"
 
 func openaiRequestHeaders(oc OpenAIClient, contentType string) []goxios.Header {
 	return []goxios.Header{

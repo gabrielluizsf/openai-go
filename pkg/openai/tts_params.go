@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"net/http"
 
-	"github.com/gabrielluizsf/goxios"
+	"github.com/Simplou/goxios"
 )
 
 type TextToSpeechParams struct {
